@@ -203,7 +203,11 @@ module Ebay # :nodoc:
       object_node :shipping_details, 'ShippingDetails', :class => ShippingDetails, :optional => true
       text_node :ship_to_locations, 'ShipToLocations', :optional => true
       text_node :site, 'Site', :optional => true
-      money_node :start_price, 'StartPrice', :optional => true
+      # needed to add default value for start_price ... bombed in initializer_test b/c the mapper 
+      # does a comparison of the value of the node versus the default.  The == comparison operator
+      # in money.rb complained that it could't find a number of cents for nil, and thus couldn't
+      # do the comparison.  Since the test was whether an error occurred or not, it failed.
+      money_node :start_price, 'StartPrice', :optional => true, :default_value => Money.new(0.0, 'USD')
       object_node :storefront, 'Storefront', :class => Storefront, :optional => true
       text_node :sub_title, 'SubTitle', :optional => true
       text_node :time_left, 'TimeLeft', :optional => true
